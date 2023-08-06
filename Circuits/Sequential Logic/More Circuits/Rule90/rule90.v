@@ -4,33 +4,17 @@ module top_module(
     input [511:0] data,
     output [511:0] q ); 
     
-    always @(clk) begin
-        for (i = 2; i < 512 ; i = i + 1 ) begin
-            if (data[i-2] == 1 & data[i-1] == 1 & data[i] == 1) begin
-                data[i-1] = 0;
-            end
-            else if (data[i-2] == 1 & data[i-1] == 1 & data[i] == 0) begin
-                data[i-1] = 1;
-            end
-            else if (data[i-2] == 1 & data[i-1] == 0 & data[i] == 1) begin
-                data[i-1] = 0;
-            end
-            else if (data[i-2] == 1 & data[i-1] == 0 & data[i] == 0) begin
-                data[i-1] = 1;
-            end
-            else if (data[i-2] == 0 & data[i-1] == 1 & data[i] == 1) begin
-                data[i-1] = 1;
-            end
-            else if (data[i-2] == 0 & data[i-1] == 1 & data[i] == 0) begin
-                data[i-1] = 0;
-            end
-            else if (data[i-2] == 0 & data[i-1] == 0 & data[i] == 1) begin
-                data[i-1] = 1;
-            end
-            else if (data[i-2] == 0 & data[i-1] == 0 & data[i] == 0) begin
-                data[i-1] = 0;
-            end
-        end
+    always @(load) begin
+           
     end
+    
+    always @(posedge clk) begin
+        if (load) begin
+            q = data;
+        end
+        else begin
+          q = {1'b0, q[511:1]} ^ {q[510:0], 1'b0};
+        end
+   	end
 
 endmodule
